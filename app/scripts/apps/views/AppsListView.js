@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('underscore');
-var Marionette = require('backbone.marionette');
-var AppsListItemView = require('./AppsListItemView');
+const _ = require('underscore');
+const Marionette = require('backbone.marionette');
+const AppsListItemView = require('./AppsListItemView');
 
-var EmptyView = Marionette.ItemView.extend({
+const EmptyView = Marionette.ItemView.extend({
   template: _.template('<div class="col-md-12">Loading...<br></div>')
 });
 

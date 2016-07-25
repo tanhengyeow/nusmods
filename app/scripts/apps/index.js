@@ -1,27 +1,27 @@
 'use strict';
 
-var App = require('../app');
-var Marionette = require('backbone.marionette');
+const App = require('../app');
+const AppsView = require('./views/AppsView');
+const Marionette = require('backbone.marionette');
 
-var navigationItem = App.request('addNavigationItem', {
+const navigationItem = App.request('addNavigationItem', {
   name: 'Apps',
   icon: 'cubes',
   url: '/apps'
 });
 
-var controller = {
-  showApps: function () {
-    var AppsView = require('./views/AppsView');
+const controller = {
+  showApps() {
     navigationItem.select();
     App.mainRegion.show(new AppsView());
   }
 };
 
-App.addInitializer(function () {
-  new Marionette.AppRouter({
-    controller: controller,
+App.addInitializer(() => {
+  new Marionette.AppRouter({ // eslint-disable-line no-new
+    controller,
     appRoutes: {
-      'apps': 'showApps'
+      apps: 'showApps'
     }
   });
 });
