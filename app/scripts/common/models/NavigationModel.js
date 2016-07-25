@@ -1,10 +1,10 @@
 'use strict';
 
-var Backbone = require('backbone');
+const Backbone = require('backbone');
 require('backbone.select');
 
 module.exports = Backbone.Model.extend({
-  initialize: function() {
+  initialize() {
     Backbone.Select.Me.applyTo(this);
     this.selected = false;
   }

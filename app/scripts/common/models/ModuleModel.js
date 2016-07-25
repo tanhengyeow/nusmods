@@ -1,20 +1,20 @@
 'use strict';
 
-var Backbone = require('backbone');
-var _ = require('underscore');
-var config = require('../../common/config');
-var modulify = require('../utils/modulify');
-var padTwo = require('../utils/padTwo');
+const Backbone = require('backbone');
+const _ = require('underscore');
+const config = require('../../common/config');
+const modulify = require('../utils/modulify');
+const padTwo = require('../utils/padTwo');
 
 // Convert exam in ISO format to 12-hour date/time format. We slice off the
 // SGT time zone and interpret as UTC time, then use the getUTC* methods so
 // that they will correspond to Singapore time regardless of the local time
 // zone.
-var examStr = function (exam) {
+const examStr = (exam) => {
   if (exam) {
-    var date = new Date(exam.slice(0,16) + 'Z');
-    var hours = date.getUTCHours();
-    return padTwo(date.getUTCDate()) +
+    const date = new Date(`${exam.slice(0, 16)}Z`);
+    const hours = date.getUTCHours();
+    return padTwo(date.getUTCDate()) +  // eslint-disable-line prefer-template
       '-' + padTwo(date.getUTCMonth() + 1) +
       '-' + date.getUTCFullYear() +
       ' ' + (hours % 12 || 12) +
@@ -24,75 +24,77 @@ var examStr = function (exam) {
   return null;
 };
 
-var DESCRIPTION_LIMIT = 40;
+const DESCRIPTION_LIMIT = 40;
 
-var shortenDescription = function (desc) {
-  return desc.split(' ').splice(0, DESCRIPTION_LIMIT).join(' ');
-};
+const shortenDescription = (desc) => (
+  desc.split(' ').splice(0, DESCRIPTION_LIMIT).join(' ')
+);
 
-var workloadify = function (workload) {
-  var workloadArray = workload.split('-');
-  var workloadComponents = {
+const workloadify = (workload) => {
+  const workloadArray = workload.split('-');
+  const workloadComponents = {
     lectureHours: workloadArray[0],
     tutorialHours: workloadArray[1],
     labHours: workloadArray[2],
     projectHours: workloadArray[3],
     preparationHours: workloadArray[4]
   };
-  _.each(workloadComponents, function (value, key) {
-    workloadComponents[key] = parseInt(value);
+  _.each(workloadComponents, (value, key) => {
+    workloadComponents[key] = parseInt(value, 10);
   });
   return workloadComponents;
 };
 
-var semesterNames = config.semesterNames;
+const semesterNames = config.semesterNames;
 
 module.exports = Backbone.Model.extend({
   idAttribute: 'ModuleCode',
-  initialize: function() {
-    var description = this.get('ModuleDescription');
+  initialize() {
+    const description = this.get('ModuleDescription');
     if (description && description.split(' ').length > DESCRIPTION_LIMIT + 10) {
       this.set('ShortModuleDescription', shortenDescription(this.get('ModuleDescription')));
     }
 
-    var workload = this.get('Workload');
+    const workload = this.get('Workload');
     if (workload) {
       this.set('WorkloadComponents', workloadify(workload));
     }
 
-    var prerequisite = this.get('Prerequisite');
+    const prerequisite = this.get('Prerequisite');
     if (prerequisite) {
       this.set('linkedPrerequisite', modulify.linkifyModules(prerequisite));
     }
 
-    var corequisite = this.get('Corequisite');
+    const corequisite = this.get('Corequisite');
     if (corequisite) {
       this.set('linkedCorequisite', modulify.linkifyModules(corequisite));
     }
 
-    var preclusion = this.get('Preclusion');
+    const preclusion = this.get('Preclusion');
     if (preclusion) {
       this.set('linkedPreclusion', modulify.linkifyModules(preclusion));
     }
 
-    _.each(this.get('History'), function (history) {
+    _.each(this.get('History'), (history) => {
+      /* eslint-disable no-param-reassign */
       history.semesterName = semesterNames[history.Semester - 1];
       history.examStr = examStr(history.ExamDate);
       if (history.examStr) {
         history.examDateStr = history.examStr.slice(0, 10);
         history.examTimeStr = history.examStr.slice(11);
       }
+      /* eslint-enable no-param-reassign */
 
-      var timetable = history.Timetable;
+      const timetable = history.Timetable;
       if (timetable) {
-        var timetableTypes = [];
-        _.each(timetable, function (lesson) {
+        let timetableTypes = [];
+        _.each(timetable, (lesson) => {
           if (timetableTypes.indexOf(lesson.LessonType) < 0) {
             timetableTypes.push(lesson.LessonType);
           }
         });
 
-        var AVAILABLE_TYPES = [
+        const AVAILABLE_TYPES = [
           'Lecture',
           'Sectional Teaching',
           'Seminar-Style Module Class',
@@ -106,41 +108,41 @@ module.exports = Backbone.Model.extend({
           'Recitation'
         ];
 
-        var PLURALIZED_LESSON_TYPES = {
-          'Lecture': 'Lectures',
+        const PLURALIZED_LESSON_TYPES = {
+          Lecture: 'Lectures',
           'Sectional Teaching': 'Sectional Teachings',
           'Seminar-Style Module Class': 'Seminar-Style Module Classes',
           'Packaged Lecture': 'Packaged Lectures',
           'Packaged Tutorial': 'Packaged Tutorials',
-          'Tutorial': 'Tutorials',
+          Tutorial: 'Tutorials',
           'Tutorial Type 2': 'Tutorial Type 2',
           'Tutorial Type 3': 'Tutorial Type 3',
           'Design Lecture': 'Design Lectures',
-          'Laboratory': 'Laboratories',
-          'Recitation': 'Recitations'
+          Laboratory: 'Laboratories',
+          Recitation: 'Recitations'
         };
 
-        timetableTypes = _.sortBy(timetableTypes, function (type) {
-          return AVAILABLE_TYPES.indexOf(type);
-        });
+        timetableTypes = _.sortBy(timetableTypes, (type) => (
+          AVAILABLE_TYPES.indexOf(type)
+        ));
 
-        var formattedTimetable = [];
-        _.each(timetableTypes, function (type) {
-          var lessons = _.filter(timetable, function (lesson) {
-            return lesson.LessonType === type;
-          });
-          lessons = _.sortBy(lessons, function (lesson) {
+        const formattedTimetable = [];
+        _.each(timetableTypes, (type) => {
+          let lessons = _.filter(timetable, (lesson) => (
+            lesson.LessonType === type
+          ));
+          lessons = _.sortBy(lessons, (lesson) => {
             // The default sort is alphabetical, which is not ideal becase
             // classes appear in this order: T1, T10, T2, T3, ...
             // Hence pad with zero then sort alphabetically (assuming < 100 classes)
-            var result = lesson.ClassNo.match(/\d/);
+            const result = lesson.ClassNo.match(/\d/);
             if (!result) {
               return lesson.ClassNo;
             }
-            var alpha = lesson.ClassNo.substring(0, result.index);
-            var number = parseInt(lesson.ClassNo.slice(result.index));
+            const alpha = lesson.ClassNo.substring(0, result.index);
+            let number = parseInt(lesson.ClassNo.slice(result.index), 10);
             if (number < 10) {
-              number = '0' + number.toString();
+              number = `0${number.toString()}`;
             }
             return alpha + number;
           });
@@ -150,67 +152,68 @@ module.exports = Backbone.Model.extend({
           });
         });
 
-        history.formattedTimetable = formattedTimetable;
+        history.formattedTimetable = formattedTimetable; // eslint-disable-line no-param-reassign
       }
     });
 
-    var corsBiddingStats = this.get('CorsBiddingStats');
+    const corsBiddingStats = this.get('CorsBiddingStats');
     if (corsBiddingStats) {
-      var formattedCorsBiddingStats = [];
+      const formattedCorsBiddingStats = [];
 
-      var semesters = [];
-      _.each(corsBiddingStats, function (stats) {
-        var sem = stats.AcadYear + ',' + stats.Semester;
+      const semesters = [];
+      _.each(corsBiddingStats, (stats) => {
+        // const sem = stats.AcadYear + ',' + stats.Semester;
+        const sem = `${stats.AcadYear},${stats.Semester}`;
         if (semesters.indexOf(sem) < 0) {
           semesters.push(sem);
         }
       });
 
-      _.each(semesters, function (sem) {
-        var parts = sem.split(',');
-        var acadYear = parts[0];
-        var semester = parts[1];
-        var stats = _.filter(corsBiddingStats, function (stat) {
-          return stat.AcadYear === acadYear && stat.Semester === semester;
-        });
+      _.each(semesters, (sem) => {
+        const parts = sem.split(',');
+        const acadYear = parts[0];
+        const semester = parts[1];
+        let stats = _.filter(corsBiddingStats, (stat) => (
+          stat.AcadYear === acadYear && stat.Semester === semester
+        ));
 
-        stats = _.map(stats, function (stat) {
-          stat = _.omit(stat, ['AcadYear', 'Semester']);
+        stats = _.map(stats, (stat) => {
+          stat = _.omit(stat, ['AcadYear', 'Semester']); // eslint-disable-line no-param-reassign
           return stat;
         });
 
         formattedCorsBiddingStats.push({
-          Semester: 'AY' + acadYear + ' Sem ' + semester,
+          Semester: `AY${acadYear} Sem ${semester}`,
           BiddingStats: stats
         });
       });
       this.set('FormattedCorsBiddingStats', formattedCorsBiddingStats);
     }
 
-    this.on('change:ExamDate', function () {
+    this.on('change:ExamDate', () => {
       this.set('examStr', examStr(this.get('ExamDate')));
     });
 
-    var types = this.get('Types');
+    const types = this.get('Types');
     this.set('inCORS', types && types.indexOf('Not in CORS') === -1);
 
     this.set('CORSLink', config.corsUrl + this.get('ModuleCode'));
     this.set('IVLELink', config.ivleUrl.replace('<ModuleCode>', this.get('ModuleCode')));
 
-    var modSemesterNames = [];
+    const modSemesterNames = [];
     this.set('hasExams', false);
-    var history = this.get('History');
+    const history = this.get('History');
     if (history) {
-      var semestersOffered = [
-        {semester: 1, name: semesterNames[0]},
-        {semester: 2, name: semesterNames[1]},
-        {semester: 3, name: semesterNames[2]},
-        {semester: 4, name: semesterNames[3]}];
-      for (var i = 0; i < history.length; i++) {
+      const semestersOffered = [
+        { semester: 1, name: semesterNames[0] },
+        { semester: 2, name: semesterNames[1] },
+        { semester: 3, name: semesterNames[2] },
+        { semester: 4, name: semesterNames[3] }];
+      for (let i = 0; i < history.length; i++) {
         if (history[i].ExamDate) {
           this.set('hasExams', true);
         }
-        var sem = history[i].Semester;
+        const sem = history[i].Semester;
         modSemesterNames.push(semesterNames[sem - 1]);
         semestersOffered[sem - 1].offered = true;
       }
