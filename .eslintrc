@@ -6,5 +6,6 @@
     "rules":  {
         "space-before-function-paren": "off",
         "comma-dangle": "off",
+        "strict": "off",
     }
 }

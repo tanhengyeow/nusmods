@@ -1,30 +1,30 @@
 'use strict';
 
-var App = require('../app');
-var Backbone = require('backbone');
-var Marionette = require('backbone.marionette');
-var team = require('./team.json');
+const AboutView = require('./views/AboutView');
+const App = require('../app');
+const Backbone = require('backbone');
+const Marionette = require('backbone.marionette');
+const TeamView = require('./views/TeamView');
+const team = require('./team.json');
 
-var controller = {
-  showAbout: function () {
-    var AboutView = require('./views/AboutView');
+const controller = {
+  showAbout() {
     App.mainRegion.show(new AboutView());
     App.navigationRegion.currentView.options.collection.deselect();
   },
-  showTeam: function () {
-    var TeamView = require('./views/TeamView');
-    var teamModel = new Backbone.Model({team: team});
-    App.mainRegion.show(new TeamView({model: teamModel}));
+  showTeam() {
+    const teamModel = new Backbone.Model({ team });
+    App.mainRegion.show(new TeamView({ model: teamModel }));
     App.navigationRegion.currentView.options.collection.deselect();
   }
 };
 
-App.addInitializer(function () {
-  new Marionette.AppRouter({
-    controller: controller,
+App.addInitializer(() => {
+  new Marionette.AppRouter({ // eslint-disable-line no-new
+    controller,
     appRoutes: {
-      'about': 'showAbout',
-      'team': 'showTeam'
+      about: 'showAbout',
+      team: 'showTeam'
     }
   });
 });
