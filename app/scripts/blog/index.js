@@ -1,6 +1,6 @@
 'use strict';
 
-var App = require('../app');
+const App = require('../app');
 
 App.request('addNavigationItem', {
   name: 'Blog',
