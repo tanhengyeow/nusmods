@@ -1,9 +1,9 @@
 'use strict';
 
-var $ = require('jquery');
-var Marionette = require('backbone.marionette');
-var _ = require('underscore');
-var analytics = require('../../analytics');
+const $ = require('jquery');
+const Marionette = require('backbone.marionette');
+const _ = require('underscore');
+const analytics = require('../../analytics');
 
 module.exports = Marionette.Behavior.extend({
   defaults: {
@@ -14,17 +14,17 @@ module.exports = Marionette.Behavior.extend({
     'click @ui.backToTopButton': 'scrollToTop'
   },
 
-  onShow: function () {
-    var that = this;
-    $(window).scroll(_.debounce(function () {
-      $(that.view.ui.backToTopButton).toggleClass('visible', 
+  onShow() {
+    const that = this;
+    $(window).scroll(_.debounce(() => {
+      $(that.view.ui.backToTopButton).toggleClass('visible',
         $(this).scrollTop() > that.options.triggerThreshold);
     }, 50));
   },
 
-  scrollToTop: function () {
+  scrollToTop() {
     analytics.track('Misc', 'Back to top', window.location.pathname);
-    $('html,body').stop(true, true).animate({scrollTop: 0}, 400);
+    $('html,body').stop(true, true).animate({ scrollTop: 0 }, 400);
     $(this.view.ui.backToTopButton).blur();
   }
 });
