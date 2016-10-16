@@ -8,6 +8,8 @@ import { loadModule } from 'actions/moduleBank';
 import type { Module } from 'types/modules';
 import type { FetchRequest } from 'types/reducers';
 
+import CorsHistoryChart from '../components/CorsHistoryChart';
+
 type RouteParams = {
   moduleCode: string,
 };
@@ -76,6 +78,9 @@ export class ModulePageContainer extends Component {
 
                 {/* TODO: Add in exam date for each semester. */}
 
+              </dl>
+              <dl className="row hidden-lg-down">
+                <CorsHistoryChart stats={module.CorsBiddingStats} />
               </dl>
             </div> : null
           }

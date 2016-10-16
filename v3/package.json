@@ -87,6 +87,7 @@
     "react-router-redux": "^4.0.5",
     "react-select-fast-filter-options": "0.0.5",
     "react-virtualized-select": "^1.4.0",
+    "recharts": "^0.15.2",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0"
