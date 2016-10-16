@@ -24,6 +24,7 @@ import _ from 'lodash';
 import config from 'config';
 import classnames from 'classnames';
 import { getSemModuleSelectList } from 'reducers/entities/moduleBank';
+import domtoimage from 'dom-to-image';
 import {
   addModule,
   cancelModifyLesson,
@@ -73,6 +74,8 @@ export class TimetableContainer extends Component {
     this.props.cancelModifyLesson();
   }
 
+  timetable: any;
+
   modifyCell(lesson: ModifiableLesson) {
     if (lesson.isAvailable) {
       this.props.changeLesson(this.props.semester, lesson);
@@ -80,6 +83,55 @@ export class TimetableContainer extends Component {
       this.props.cancelModifyLesson();
     } else {
       this.props.modifyLesson(lesson);
+    }
+  }
+
+  downloadTimetable(format: string, size: string, orientation: string) {
+    // Use ReactDOM to get the DOM of timetable node
+    const timetable = this.timetable;
+
+    let height = 0;
+    let width = 0;
+
+    switch (size) {
+      case 'lg':
+        height = 700;
+        width = 1125;
+        break;
+      case 'md':
+        break;
+      case 'sm':
+        break;
+      default:
+        return;
+    }
+
+    if (orientation === 'vertical') {
+      [height, width] = [width, height];
+    }
+
+    const style = { paddingTop: '40px', marginLeft: '10px', marginRight: '10px' };
+
+    switch (format) {
+      case 'jpeg':
+        domtoimage.toJpeg(timetable, { height: 1000, width: 1600, style, bgcolor: '#fff' })
+          .then((dataUrl) => {
+            const link = document.createElement('a');
+            link.download = 'timetable.jpeg';
+            link.href = dataUrl;
+            link.click();
+          });
+        break;
+      case 'png':
+        break;
+      case 'pdf':
+        break;
+      case 'excel':
+        break;
+      case 'ical':
+        break;
+      default:
+        return;
     }
   }
 
@@ -146,11 +198,14 @@ export class TimetableContainer extends Component {
             <div className={classnames('timetable-wrapper', {
               'col-md-12': isHorizontalOrientation,
               'col-md-8': !isHorizontalOrientation,
-            })}>
-              <Timetable lessons={arrangedLessonsWithModifiableFlag}
-                horizontalOrientation={isHorizontalOrientation}
-                onModifyCell={this.modifyCell}
-              />
+            })}
+          >
+              <div ref={(ref) => { this.timetable = ref; }}>
+                <Timetable lessons={arrangedLessonsWithModifiableFlag}
+                  horizontalOrientation={isHorizontalOrientation}
+                  onModifyCell={this.modifyCell}
+                />
+              </div>
               <br/>
             </div>
             <div className={classnames({
@@ -189,6 +244,21 @@ export class TimetableContainer extends Component {
                       this.props.removeModule(this.props.semester, moduleCode);
                     }}
                   />
+                </div>
+
+                <div className="col-md-2">
+                  <button type="button"
+                    className="btn btn-outline-primary"
+                    onClick={this.props.toggleTimetableOrientation}
+                  >
+                    <i className="fa fa-exchange"/>
+                  </button>
+                  <button type="button"
+                    className="btn btn-outline-primary"
+                    onClick={() => this.downloadTimetable('jpeg', 'lg', 'horizontal')}
+                  >
+                    <i className="fa fa-download" />
+                  </button>
                 </div>
               </div>
             </div>
