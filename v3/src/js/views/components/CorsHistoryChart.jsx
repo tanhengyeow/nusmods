@@ -83,10 +83,10 @@ function CorsHistoryChart(props: Props) {
   const groups = getStatGroups(stats);
   const studentTypes = getStatStudentTypes(stats);
 
-  // TODO: Add selectors to select stat filters
-  const data = formatStats(stats, rounds[0], groups[2], faculties[0], studentTypes[0]);
+  // TODO: Add selectors to filter results
+  const data = formatStats(stats, rounds[0], groups[0], faculties[0], studentTypes[0]);
 
-  // TODO: Remove hard-coded styles
+  // TODO: Remove hard-coded styles, and format tooltip :(
   return (
     <div style={{ height: 400, width: '100%' }}>
       <h3>CORS Bidding Stats</h3>
