@@ -81,6 +81,7 @@ const common = {
     new LodashModuleReplacementPlugin({
       caching: true,
       collections: true,
+      currying: true,
       flattening: true,
       paths: true,
     }),
