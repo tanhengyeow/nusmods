@@ -73,6 +73,11 @@ function getStatRounds(stats: Array<BiddingStat>) {
 function CorsHistoryChart(props: Props) {
   const { stats } = props;
 
+  if (stats === undefined) {
+    // TODO: Update this message to something else. :)
+    return (<p>CORS Bidding Stats not found.</p>);
+  }
+
   const faculties = getStatFaculties(stats);
   const rounds = getStatRounds(stats);
   const groups = getStatGroups(stats);
