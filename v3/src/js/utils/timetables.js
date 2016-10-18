@@ -183,3 +183,45 @@ export function areOtherClassesAvailable(lessons: Array<Lesson> | Array<RawLesso
   }
   return Object.keys(_.groupBy(lessonTypeGroups[lessonType], lesson => lesson.ClassNo)).length > 1;
 }
+
+const separator = '&';
+
+export function serializeSemTimetable(semTimetableConfig: SemTimetableConfig): string {
+  const fragments = [];
+  Object.keys(semTimetableConfig).forEach((moduleCode: ModuleCode) => {
+    const lessonConfig: ModuleLessonConfig = semTimetableConfig[moduleCode];
+    if (!_.isEmpty(lessonConfig)) {
+      Object.keys(lessonConfig).forEach((lessonType: LessonType) => {
+        fragments.push(`${moduleCode}[${LESSON_TYPE_ABBREV[lessonType]}]=${lessonConfig[lessonType]}`);
+      });
+    } else {
+      // For modules where there are no lessons such as FYP.
+      fragments.push(`${moduleCode}=`);
+    }
+  });
+  return fragments.join(separator);
+}
+
+const timetableStringRegex = /((\w+)(?:\[(\w+)\])?=(\w+)?)/g;
+export function parseSemTimetable(semTimetable: string): SemTimetableConfig {
+  const timetableConfig = {};
+  if (!semTimetable) {
+    return timetableConfig;
+  }
+
+  let fragments = [];
+  const invertedLessonAbbrev = _.invert(LESSON_TYPE_ABBREV);
+  /* eslint-disable no-cond-assign */
+  while ((fragments = timetableStringRegex.exec(semTimetable)) !== null) {
+    const moduleCode: ModuleCode = fragments[2];
+    const lessonType: LessonType = fragments[3];
+    const classNo: ClassNo = fragments[4];
+    if (!timetableConfig[moduleCode]) {
+      timetableConfig[moduleCode] = {};
+    }
+    if (lessonType && classNo) {
+      timetableConfig[moduleCode][invertedLessonAbbrev[lessonType]] = classNo;
+    }
+  }
+  return timetableConfig;
+}
