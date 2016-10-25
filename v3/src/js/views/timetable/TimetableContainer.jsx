@@ -86,49 +86,45 @@ export class TimetableContainer extends Component {
     }
   }
 
-  downloadTimetable(format: string, size: string, orientation: string) {
-    // Use ReactDOM to get the DOM of timetable node
-    const timetable = this.timetable;
+  downloadTimetable(format: string) {
+    const downloadFileName = `nusmods.${format}`;
 
-    let height = 0;
-    let width = 0;
+    // Node has to be the inner content container with the full timetable width.
+    const node = this.timetable.getElementsByClassName('timetable-content-inner-container')[0];
 
-    switch (size) {
-      case 'lg':
-        height = 700;
-        width = 1125;
-        break;
-      case 'md':
-        break;
-      case 'sm':
-        break;
-      default:
-        return;
-    }
+    // Ensures that image is not flushed to the left side and top
+    const style = {
+      marginLeft: '20px',
+      paddingTop: '20px',
+    };
 
-    if (orientation === 'vertical') {
-      [height, width] = [width, height];
-    }
-
-    const style = { paddingTop: '40px', marginLeft: '10px', marginRight: '10px' };
+    // NOTE: `height` and `width` here should not be part of style, since they determine
+    // how big the image is.
+    const options = {
+      style,
+      height: 600,
+      width: 1100,
+      bgcolor: '#fff',
+    };
 
     switch (format) {
       case 'jpeg':
-        domtoimage.toJpeg(timetable, { height: 1000, width: 1600, style, bgcolor: '#fff' })
+        domtoimage.toJpeg(node, options)
           .then((dataUrl) => {
             const link = document.createElement('a');
-            link.download = 'timetable.jpeg';
+            link.download = downloadFileName;
             link.href = dataUrl;
             link.click();
           });
         break;
-      case 'png':
-        break;
       case 'pdf':
+        // TODO
         break;
       case 'excel':
+        // TODO
         break;
       case 'ical':
+        // TODO
         break;
       default:
         return;
@@ -219,6 +215,12 @@ export class TimetableContainer extends Component {
                 >
                   <i className="fa fa-exchange"/>
                 </button>
+                <button type="button"
+                  className="btn btn-outline-primary"
+                  onClick={() => this.downloadTimetable('jpeg', 'lg', 'vert')}
+                >
+                  <i className="fa fa-download" />
+                </button>
               </div>
               <div className="row">
                 <div className="col-md-12">
@@ -244,21 +246,6 @@ export class TimetableContainer extends Component {
                       this.props.removeModule(this.props.semester, moduleCode);
                     }}
                   />
-                </div>
-
-                <div className="col-md-2">
-                  <button type="button"
-                    className="btn btn-outline-primary"
-                    onClick={this.props.toggleTimetableOrientation}
-                  >
-                    <i className="fa fa-exchange"/>
-                  </button>
-                  <button type="button"
-                    className="btn btn-outline-primary"
-                    onClick={() => this.downloadTimetable('jpeg', 'lg', 'horizontal')}
-                  >
-                    <i className="fa fa-download" />
-                  </button>
                 </div>
               </div>
             </div>
