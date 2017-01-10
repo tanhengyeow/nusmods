@@ -8,6 +8,8 @@ import configureStore from 'stores/configure-store';
 import routes from 'routes';
 import storage from 'storage';
 
+import swURL from 'file?name=[name].[ext]!./service-worker';
+
 require('file?name=[name].[ext]!data/webmanifest.json');
 
 require('main.scss');
@@ -35,6 +37,10 @@ store.subscribe(_.throttle(() => {
 const history = syncHistoryWithStore(useRouterHistory(createHistory)({
   basename: '/',
 }), store);
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register(swURL);
+}
 
 ReactDOM.render(routes({ store, history }),
   document.getElementById('app'));
