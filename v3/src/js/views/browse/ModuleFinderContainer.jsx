@@ -13,7 +13,7 @@ function ModuleFinderContainer(props: { moduleList: Array<ModuleCondensed> }) {
       <hr />
       <p>WIP. Only 30 shown for brevity.</p>
       <hr />
-      {props.moduleList.slice(0, 30).map((module) => {
+      {props.moduleList.map((module) => {
         return (
           <div key={module.ModuleCode}>
             <Link to={modulePagePath(module.ModuleCode)}>

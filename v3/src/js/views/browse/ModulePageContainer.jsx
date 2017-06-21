@@ -116,6 +116,7 @@ export class ModulePageContainer extends Component {
               <h1 className="page-title">{module.ModuleCode} {module.ModuleTitle}</h1>
               <hr />
               <dl className="row">
+                {console.log(this.props)}
                 {module.ModuleDescription ? <dt className="col-sm-3">Description</dt> : null}
                 {module.ModuleDescription ?
                   <dd className="col-sm-9">{module.ModuleDescription}</dd> : null}
