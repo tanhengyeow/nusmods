@@ -8,55 +8,66 @@ import DocumentTitle from 'react-document-title';
 import {modulePagePath} from 'utils/modules';
 import type {ModuleCondensed} from 'types/modules';
 
+export class FacultyPageContainer extends Component {
+  props: { moduleList: Array<ModuleCondensed> };
 
-type Props = {
-  newStudent: boolean,
-  faculty: Faculty,
-  currentThemeId: string,
+  constructor() {
+    super();
 
-  selectTheme: Function,
-  selectNewStudent: Function,
-  selectFaculty: Function,
-};
+    this.state = {
+      code: 'ACC'
+    }
+  }
 
 
 
-function FacultyContainer (props: { moduleList: Array<ModuleCondensed> })  {
-  var fac = 'ACC';
+  // changeCode(str: string) {
+  //   console.log("dfgdfgfdgdfgdfg");
+  //   this.setState({
+  //     code: str
+  // })}
 
-  return (
 
-    <DocumentTitle title={`NUSModsWiki`}>
-      <div className="page-container">
-        <div className="row">
-          <button type="button"
-                  className="btn btn-outline-primary" onClick={fac = 'ACC'}>
-            Accounting
-          </button>
-          <button type="button"
-                  className="btn btn-outline-primary" onClick={fac = 'CS'}>
-            Computing
-          </button>
+
+  render(){
+
+    return (
+
+      <DocumentTitle title={`NUSModsWiki`}>
+        <div className="page-container">
+          <div className="row">
+            <button type="button"
+                    className="btn btn-outline-primary" >
+              Accounting
+            </button>
+            <button type="button"
+                    className="btn btn-outline-primary" >
+              Computing
+            </button>
+          </div>
+          <hr />
+          <div >
+            {this.props.moduleList.map((module) => {
+              return (
+                (module.ModuleCode.includes( 'ACC' )) &&
+                <div key={module.ModuleCode}>
+                  <Link to={modulePagePath(module.ModuleCode)}>
+                    {module.ModuleCode} {module.ModuleTitle}
+                  </Link>
+                  <hr />
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <hr />
-        <div >
-          {props.moduleList.map((module) => {
-            return (
-              (module.ModuleCode.includes(fac)) &&
-              <div key={module.ModuleCode}>
-                <Link to={modulePagePath(module.ModuleCode)}>
-                  {module.ModuleCode} {module.ModuleTitle}
-                </Link>
-                <hr />
-              </div>
-            );
-          })}
-        </div>
-      </div>
 
-    </DocumentTitle>
-  );
+
+      </DocumentTitle>
+    );
+  }
 }
+
+
 
 function mapStateToProps(state) {
   return {
@@ -65,5 +76,5 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-)(FacultyContainer);
+)(FacultyPageContainer);
 
