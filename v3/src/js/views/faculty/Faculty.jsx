@@ -21,11 +21,11 @@ export class FacultyPageContainer extends Component {
 
 
 
-  // changeCode(str: string) {
-  //   console.log("dfgdfgfdgdfgdfg");
-  //   this.setState({
-  //     code: str
-  // })}
+  changeCode(str: string) {
+    //console.log("dfgdfgfdgdfgdfg");
+    this.setState({
+      code: str
+  })}
 
 
 
@@ -37,11 +37,11 @@ export class FacultyPageContainer extends Component {
         <div className="page-container">
           <div className="row">
             <button type="button"
-                    className="btn btn-outline-primary" >
+                    className="btn btn-outline-primary" onClick={()=>{ this.changeCode('ACC') }}>
               Accounting
             </button>
             <button type="button"
-                    className="btn btn-outline-primary" >
+                    className="btn btn-outline-primary" onClick={()=>{ this.changeCode('CS') }}>
               Computing
             </button>
           </div>
@@ -49,7 +49,7 @@ export class FacultyPageContainer extends Component {
           <div >
             {this.props.moduleList.map((module) => {
               return (
-                (module.ModuleCode.includes( 'ACC' )) &&
+                (module.ModuleCode.includes( this.state.code )) &&
                 <div key={module.ModuleCode}>
                   <Link to={modulePagePath(module.ModuleCode)}>
                     {module.ModuleCode} {module.ModuleTitle}
