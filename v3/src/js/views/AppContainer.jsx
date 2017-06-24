@@ -69,30 +69,32 @@ export class AppContainer extends Component {
           </form>
           <p className="pull-xs-right hidden-xs-down"><small>{weekText}</small></p>
         </nav>
+
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-2">
               <ul className="nm-nav-tabs">
-                <li role="presentation" className="nm-nav-item">
+                {/* <li role="presentation" className="nm-nav-item">
                   <Link className="nav-link" activeClassName="active" to="/timetable">
                     <i className="fa fa-fw fa-lg fa-table" />
                     <span className="nm-link-title"> Timetable</span>
                   </Link>
-                </li>
-                <li role="presentation" className="nm-nav-item">
+                </li>*/}
+                {/* <li role="presentation" className="nm-nav-item">
                   <Link className="nav-link" activeClassName="active" to="/modules">
                     <i className="fa fa-fw fa-lg fa-list" />
                     <span className="nm-link-title"> Browse</span>
                   </Link>
-                </li>
-                <li role="presentation" className="nm-nav-item">
+                </li>*/}
+                {/* <li role="presentation" className="nm-nav-item">
                   <Link className="nav-link" activeClassName="active" to="/settings">
                     <i className="fa fa-fw fa-lg fa-gear" />
                     <span className="nm-link-title"> Settings</span>
                   </Link>
-                </li>
+                </li>*/}
               </ul>
             </div>
+
             <div className="col-md-10 main-content">
               {this.props.fetchModuleListRequest.isPending && !this.props.moduleList.length ?
                 <p>Loading...</p> : null
@@ -103,6 +105,7 @@ export class AppContainer extends Component {
             </div>
           </div>
         </div>
+
         <Footer />
       </div>
     );
