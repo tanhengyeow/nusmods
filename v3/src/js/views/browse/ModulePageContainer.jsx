@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactDisqusThread from 'react-disqus-thread';
 import DocumentTitle from 'react-document-title';
 import config from 'config';
 
@@ -13,9 +12,18 @@ import { formatExamDate } from 'utils/modules';
 import type { TimetableConfig } from 'types/timetables';
 import AddModuleButton from './AddModuleButton';
 import RemoveModuleButton from './RemoveModuleButton';
-import CorsBiddingStatsTableControl from './CorsBiddingStatsTableControl';
-import LessonTimetableControl from './LessonTimetableControl';
-import ModuleTree from './ModuleTree';
+
+
+
+var firebase = require("firebase");
+var firebaseconfig = {
+  apiKey: 'AIzaSyD81H76yeEZNPu4EpRxclk70JvEh1tlG8c',
+  authDomain: 'wiki-5a16a.firebaseapp.com',
+  databaseURL: 'https://wiki-5a16a.firebaseio.com',
+  storageBucket: 'wiki-5a16a.appspot.com',
+};
+firebase.initializeApp(firebaseconfig);
+
 
 type RouteParams = {
   moduleCode: string,
@@ -29,6 +37,7 @@ type Props = {
   addModule: Function,
   removeModule: Function,
 };
+
 
 export class ModulePageContainer extends Component {
 
@@ -71,6 +80,19 @@ export class ModulePageContainer extends Component {
     return timetables[semester] && !!timetables[semester][module.ModuleCode];
   }
 
+  readUsefulLinks(module: Module){
+    var ref = firebase.database().ref(module.ModuleCode+"/Useful Links/");
+    console.log('asdsasadasdasdsa');
+    ref.on('value', function(snapshot) {
+      var result = snapshot.val().toString();
+      console.log(result);
+      return ref.once("value");
+    }, function (error) {
+      console.log('Error: ' + error.code);
+      return 'There is currently nothing';
+    });
+  }
+
   props: Props;
 
   render() {
@@ -90,6 +112,8 @@ export class ModulePageContainer extends Component {
     const semsOffered = this.semestersOffered()
       .map(sem => `Semester ${sem}`)
       .join(', ');
+
+    const usefulLinks = this.readUsefulLinks(module);
 
     const addOrRemoveToTimetableLinks = this.semestersOffered().map(
       semester => (
@@ -116,6 +140,7 @@ export class ModulePageContainer extends Component {
               <h1 className="page-title">{module.ModuleCode} {module.ModuleTitle}</h1>
               <hr />
               <dl className="row">
+                {console.log(this.props)}
                 {module.ModuleDescription ? <dt className="col-sm-3">Description</dt> : null}
                 {module.ModuleDescription ?
                   <dd className="col-sm-9">{module.ModuleDescription}</dd> : null}
@@ -151,33 +176,16 @@ export class ModulePageContainer extends Component {
                   </ul>
                 </dd>
 
-                <div>
-                  {addOrRemoveToTimetableLinks}
-                </div>
+
 
               </dl>
 
               <hr />
+              <dt className="col-sm-3">Useful Links</dt>
+              <dd className="col-sm-9">{usefulLinks}</dd>
 
-              {module.ModmavenTree ?
-                <ModuleTree module={module} />
-                :
-                <p>Prerequisites are not available.</p>
-              }
 
-              {module.CorsBiddingStats ?
-                <CorsBiddingStatsTableControl stats={module.CorsBiddingStats} />
-                : null
-              }
 
-              <LessonTimetableControl semestersOffered={this.semestersOffered()}
-                history={module.History} />
-
-              <ReactDisqusThread shortname={config.disqusShortname}
-                identifier={module.ModuleCode}
-                title={`${module.ModuleCode} ${module.ModuleTitle}`}
-                url={`https://nusmods.com/modules/${module.ModuleCode}/reviews`}
-              />
 
             </div> : null
           }
