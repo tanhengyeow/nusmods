@@ -60,16 +60,16 @@
       <file leaf-file-name="ModulePageContainer.jsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js/views/browse/ModulePageContainer.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-70">
-              <caret line="90" column="42" selection-start-line="90" selection-start-column="42" selection-end-line="90" selection-end-column="42" />
+            <state relative-caret-position="153">
+              <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
               <folding>
                 <element signature="e#9#50#0" expanded="true" />
-                <marker date="1498273808647" expanded="true" signature="4063:6679" ph="..." />
-                <marker date="1498273808647" expanded="true" signature="4106:6656" ph="..." />
-                <marker date="1498273808647" expanded="true" signature="4388:6622" ph="..." />
-                <marker date="1498273808647" expanded="true" signature="4531:6462" ph="..." />
-                <marker date="1498273808647" expanded="true" signature="6188:6439" ph="..." />
-                <marker date="1498273808647" expanded="true" signature="6239:6417" ph="..." />
+                <marker date="1498275835845" expanded="true" signature="4086:6702" ph="..." />
+                <marker date="1498275835845" expanded="true" signature="4129:6679" ph="..." />
+                <marker date="1498275835845" expanded="true" signature="4411:6645" ph="..." />
+                <marker date="1498275835845" expanded="true" signature="4554:6485" ph="..." />
+                <marker date="1498275835845" expanded="true" signature="6211:6462" ph="..." />
+                <marker date="1498275835845" expanded="true" signature="6262:6440" ph="..." />
               </folding>
             </state>
           </provider>
@@ -667,12 +667,12 @@
       <workItem from="1498108529793" duration="5909000" />
       <workItem from="1498201368686" duration="6244000" />
       <workItem from="1498228917415" duration="6662000" />
-      <workItem from="1498271626754" duration="1815000" />
+      <workItem from="1498271626754" duration="3972000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="83995000" />
+    <option name="totallyTimeSpent" value="86152000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1019,14 +1019,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="107" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/firebase/externs/firebase-externs.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="487">
@@ -1088,18 +1080,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="96" column="37" selection-start-line="96" selection-start-column="37" selection-end-line="96" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/js/views/browse/ModulePageContainer.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-70">
-          <caret line="90" column="42" selection-start-line="90" selection-start-column="42" selection-end-line="90" selection-end-column="42" />
+        <state relative-caret-position="153">
+          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
           <folding>
             <element signature="e#9#50#0" expanded="true" />
-            <marker date="1498273808647" expanded="true" signature="4063:6679" ph="..." />
-            <marker date="1498273808647" expanded="true" signature="4106:6656" ph="..." />
-            <marker date="1498273808647" expanded="true" signature="4388:6622" ph="..." />
-            <marker date="1498273808647" expanded="true" signature="4531:6462" ph="..." />
-            <marker date="1498273808647" expanded="true" signature="6188:6439" ph="..." />
-            <marker date="1498273808647" expanded="true" signature="6239:6417" ph="..." />
+            <marker date="1498275835845" expanded="true" signature="4086:6702" ph="..." />
+            <marker date="1498275835845" expanded="true" signature="4129:6679" ph="..." />
+            <marker date="1498275835845" expanded="true" signature="4411:6645" ph="..." />
+            <marker date="1498275835845" expanded="true" signature="4554:6485" ph="..." />
+            <marker date="1498275835845" expanded="true" signature="6211:6462" ph="..." />
+            <marker date="1498275835845" expanded="true" signature="6262:6440" ph="..." />
           </folding>
         </state>
       </provider>
