@@ -14,6 +14,7 @@ import ModuleFinderContainer from 'views/browse/ModuleFinderContainer';
 import ModulePageContainer from 'views/browse/ModulePageContainer';
 import SettingsContainer from 'views/settings/SettingsContainer';
 import TeamContainer from 'views/static/TeamContainer';
+import FacultyContainer from 'views/faculty/Faculty';
 
 /* eslint-disable react/prop-types */
 export default function ({ store, history }) {
@@ -21,7 +22,8 @@ export default function ({ store, history }) {
     <Provider store={store}>
       <Router history={history}>
         <Route path="/" component={AppContainer}>
-          <IndexRedirect to="/timetable" />
+          <IndexRedirect to="/faculty" />
+          <Route path="/faculty" component={FacultyContainer} />
           <Route path="/about" component={AboutContainer} />
           <Route path="/faq" component={FaqContainer} />
           <Route path="/timetable" component={TimetableContainer} />
