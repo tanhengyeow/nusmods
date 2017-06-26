@@ -4,10 +4,18 @@ declare module 'firebase' {
   declare module.exports: any;
 }
 
+declare module 'firebase-admin' {
+  declare module.exports: any;
+}
+
 declare module 'react' {
   declare module.exports: any;
 }
 
 declare module 'react-dom' {
+  declare module.exports: any;
+}
+
+declare module 'react-edit-inline' {
   declare module.exports: any;
 }

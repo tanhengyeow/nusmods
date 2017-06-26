@@ -58,13 +58,13 @@ export class AppContainer extends Component {
         <nav className="navbar navbar-fixed-top navbar-light bg-faded nm-navbar">
           <Link className="navbar-brand nm-navbar-brand" to="/" title="Home" />
           <form className="hidden-xs-down"
-            style={{ width: '100%', maxWidth: 400, display: 'inline-block' }}
+                style={{ width: '100%', maxWidth: 400, display: 'inline-block' }}
           >
             <ModulesSelect moduleList={this.props.moduleSelectList}
-              onChange={(moduleCode) => {
+                           onChange={(moduleCode) => {
                 this.context.router.push(`/modules/${moduleCode.value}`);
               }}
-              placeholder="Search modules"
+                           placeholder="Search modules"
             />
           </form>
           <p className="pull-xs-right hidden-xs-down"><small>{weekText}</small></p>
