@@ -41,6 +41,8 @@ type Props = {
 
 export class ModulePageContainer extends Component {
 
+  props: Props;
+
   constructor() {
     super();
     this.dataChanged = this.dataChanged.bind(this);
@@ -54,20 +56,30 @@ export class ModulePageContainer extends Component {
 
   componentDidMount() {
     this.loadModuleInformation(this.props);
-    this.readUsefulLinks();
-    this.readFeedbacks();
-    this.readProjects();
-    this.readFunFacts();
   }
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.routeParams.moduleCode !== this.props.routeParams.moduleCode) {
       this.loadModuleInformation(nextProps);
+
+      this.setState({
+        usefulLinks: '',
+        feedbacks: '',
+        projects: '',
+        funFacts: '',
+      });
     }
+
   }
 
   loadModuleInformation(props: Props) {
     this.props.loadModule(props.routeParams.moduleCode);
+
+    this.readUsefulLinks();
+    this.readFeedbacks();
+    this.readProjects();
+    this.readFunFacts();
+
   }
 
   semestersOffered(): number[] {
@@ -151,7 +163,7 @@ export class ModulePageContainer extends Component {
   dataChanged(data) {
     // data = { description: "New validated text comes here" }
     // Update your model from here
-    console.log(data);
+    //console.log(data);
     this.setState({...data});
     var ref = firebase.database().ref(this.props.module.ModuleCode + '/');
 
@@ -160,9 +172,10 @@ export class ModulePageContainer extends Component {
     });
   }
 
-  props: Props;
+
 
   render() {
+
     const module = this.props.module;
     const documentTitle = module ?
       `${module.ModuleCode} ${module.ModuleTitle} - ${config.brandName}` : 'Not found';
@@ -180,6 +193,7 @@ export class ModulePageContainer extends Component {
       .map(sem => `Semester ${sem}`)
       .join(', ');
 
+
     const addOrRemoveToTimetableLinks = this.semestersOffered().map(
       semester => (
         this.moduleHasBeenAdded(module, semester) ?
@@ -193,6 +207,7 @@ export class ModulePageContainer extends Component {
       ),
     );
 
+
     return (
       <DocumentTitle title={documentTitle}>
         <div className="module-container">
@@ -205,7 +220,6 @@ export class ModulePageContainer extends Component {
               <h1 className="page-title">{module.ModuleCode} {module.ModuleTitle}</h1>
               <hr />
               <dl className="row">
-                {console.log(this.props)}
                 {module.ModuleDescription ? <dt className="col-sm-3">Description</dt> : null}
                 {module.ModuleDescription ?
                   <dd className="col-sm-9">{module.ModuleDescription}</dd> : null}
@@ -243,19 +257,18 @@ export class ModulePageContainer extends Component {
 
 
               </dl>
-
               <hr />
               <dt className="col-sm-3">Useful Links</dt>
-              <dd className="col-sm-9">{ this.state.usefulLinks != '' ? <InlineEdit text={this.state.usefulLinks} activeClassName="editing" change={this.dataChanged} paramName="usefulLinks" /> : <font color="red">There is nothing to show here :( Try adding something!</font> }</dd>
+              <dd className="col-sm-9">{ this.state.usefulLinks != '' ? <InlineEdit text={this.state.usefulLinks} activeClassName="editing" change={this.dataChanged} paramName="usefulLinks" /> : this.readUsefulLinks() }</dd>
 
               <dt className="col-sm-3">Past lecturers/tutors feedback</dt>
-              <dd className="col-sm-9">{ this.state.feedbacks != '' ? <InlineEdit text={this.state.feedbacks} activeClassName="editing" change={this.dataChanged} paramName="feedbacks" /> : <font color="red">There is nothing to show here :( Try adding something!</font> }</dd>
+              <dd className="col-sm-9">{ this.state.feedbacks != '' ? <InlineEdit text={this.state.feedbacks} activeClassName="editing" change={this.dataChanged} paramName="feedbacks" /> : this.readFeedbacks() }</dd>
 
               <dt className="col-sm-3">Outstanding projects</dt>
-              <dd className="col-sm-9">{ this.state.projects != '' ? <InlineEdit text={this.state.projects} activeClassName="editing" change={this.dataChanged} paramName="projects" /> : <font color="red">There is nothing to show here :( Try adding something!</font> }</dd>
+              <dd className="col-sm-9">{ this.state.projects != '' ? <InlineEdit text={this.state.projects} activeClassName="editing" change={this.dataChanged} paramName="projects" /> : this.readProjects() }</dd>
 
               <dt className="col-sm-3">Fun facts</dt>
-              <dd className="col-sm-9">{ this.state.funFacts != '' ? <InlineEdit text={this.state.funFacts} activeClassName="editing" change={this.dataChanged} paramName="funFacts" /> : <font color="red">There is nothing to show here :( Try adding something!</font> }</dd>
+              <dd className="col-sm-9">{ this.state.funFacts != '' ? <InlineEdit text={this.state.funFacts} activeClassName="editing" change={this.dataChanged} paramName="funFacts" /> : this.readFunFacts() }</dd>
 
 
             </div> : null
@@ -273,6 +286,7 @@ function mapStateToProps(state, ownProps) {
     fetchModuleRequest: state.requests.fetchModuleRequest || {},
     timetables,
   };
+
 }
 
 export default connect(

@@ -31,30 +31,6 @@ function SettingsContainer(props: Props) {
         <div className="row">
           <div className="col-md-8 offset-md-1">
             <h1 className="page-title">Settings</h1>
-            <h4>New Student</h4>
-            <div className="row">
-              <div className="col-sm-7 col-xs-7">
-                <p>For certain modules, places are reserved for new students in CORS Bidding Rounds 1 and 2,
-                recognizing that new students do not have as many points as some of the seniors.</p>
-              </div>
-              <div className="col-sm-4 offset-sm-1 col-xs-5 text-xs-right">
-                <NewStudentSelect newStudent={props.newStudent}
-                  onSelectNewStudent={props.selectNewStudent}
-                />
-              </div>
-            </div>
-            <hr />
-            <h4>Faculty</h4>
-            <div className="row">
-              <div className="col-sm-7">
-                <p>CEG Students are to select <strong>Joint Multi-Disciplinary Program</strong> due to the
-                unique nature of their course.</p>
-              </div>
-              <div className="col-sm-4 offset-sm-1 text-xs-right">
-                <FacultySelect faculty={props.faculty} onChange={props.selectFaculty} />
-              </div>
-            </div>
-            <hr />
             <h4>Theme</h4>
             <div>
               {availableThemes.map((theme) => {

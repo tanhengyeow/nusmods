@@ -45,6 +45,10 @@ export class FacultyPageContainer extends Component {
                     className="btn btn-outline-primary" onClick={()=>{ this.changeCode('CS') }}>
               Computing
             </button>
+            <button type="button"
+                    className="btn btn-outline-primary" onClick={()=>{ this.changeCode('EE') }}>
+              Engineering
+            </button>
           </div>
           <hr />
           <div >
