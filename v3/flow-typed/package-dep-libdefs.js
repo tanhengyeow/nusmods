@@ -19,3 +19,7 @@ declare module 'react-dom' {
 declare module 'react-edit-inline' {
   declare module.exports: any;
 }
+
+declare module 'react-notifications' {
+  declare module.exports: any;
+}
