@@ -1,5 +1,6 @@
 // @flow
 import type {Faculty} from 'types/modules';
+
 import {Link} from 'react-router';
 
 import React, { Component } from 'react';
@@ -15,7 +16,7 @@ export class FacultyPageContainer extends Component {
     super();
 
     this.state = {
-      code: 'ACC'
+      code: 'ACC' 
     }
   }
 
