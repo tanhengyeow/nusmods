@@ -46,6 +46,7 @@ export class ModulePageContainer extends Component {
   constructor() {
     super();
     this.dataChanged = this.dataChanged.bind(this);
+
     this.state = {
       usefulLinks: '',
       feedbacks: '',
@@ -69,16 +70,15 @@ export class ModulePageContainer extends Component {
         funFacts: '',
       });
     }
-
   }
 
   loadModuleInformation(props: Props) {
     this.props.loadModule(props.routeParams.moduleCode);
 
-    this.readUsefulLinks();
-    this.readFeedbacks();
-    this.readProjects();
-    this.readFunFacts();
+    // this.readUsefulLinks();
+    // this.readFeedbacks();
+    // this.readProjects();
+    // this.readFunFacts();
 
   }
 
@@ -109,7 +109,7 @@ export class ModulePageContainer extends Component {
 
   readUsefulLinks() {
     var ref = firebase.database().ref(this.props.module.ModuleCode + '/usefulLinks/');
-
+    console.log('asdsads' + this.state.usefulLinks + 'asd');
     ref.on('value', function (snapshot) {
       var obj = snapshot.val();
 
@@ -258,19 +258,21 @@ export class ModulePageContainer extends Component {
 
               </dl>
               <hr />
+              <dl className="row">
+
               <dt className="col-sm-3">Useful Links</dt>
-              <dd className="col-sm-9">{ this.state.usefulLinks != '' ? <InlineEdit text={this.state.usefulLinks} activeClassName="editing" change={this.dataChanged} paramName="usefulLinks" /> : this.readUsefulLinks() }</dd>
+              <dd className="col-sm-9">{ this.state.usefulLinks !== '' ? <InlineEdit text={this.state.usefulLinks} activeClassName="editing" change={this.dataChanged} paramName="usefulLinks" /> : this.readUsefulLinks() }</dd>
 
               <dt className="col-sm-3">Past lecturers/tutors feedback</dt>
-              <dd className="col-sm-9">{ this.state.feedbacks != '' ? <InlineEdit text={this.state.feedbacks} activeClassName="editing" change={this.dataChanged} paramName="feedbacks" /> : this.readFeedbacks() }</dd>
+              <dd className="col-sm-9">{ this.state.feedbacks !== '' ? <InlineEdit text={this.state.feedbacks} activeClassName="editing" change={this.dataChanged} paramName="feedbacks" /> : this.readFeedbacks() }</dd>
 
               <dt className="col-sm-3">Outstanding projects</dt>
-              <dd className="col-sm-9">{ this.state.projects != '' ? <InlineEdit text={this.state.projects} activeClassName="editing" change={this.dataChanged} paramName="projects" /> : this.readProjects() }</dd>
+              <dd className="col-sm-9">{ this.state.projects !== '' ? <InlineEdit text={this.state.projects} activeClassName="editing" change={this.dataChanged} paramName="projects" /> : this.readProjects() }</dd>
 
               <dt className="col-sm-3">Fun facts</dt>
-              <dd className="col-sm-9">{ this.state.funFacts != '' ? <InlineEdit text={this.state.funFacts} activeClassName="editing" change={this.dataChanged} paramName="funFacts" /> : this.readFunFacts() }</dd>
+              <dd className="col-sm-9">{ this.state.funFacts !== '' ? <InlineEdit text={this.state.funFacts} activeClassName="editing" change={this.dataChanged} paramName="funFacts" /> : this.readFunFacts() }</dd>
 
-
+              </dl>
             </div> : null
           }
         </div>
