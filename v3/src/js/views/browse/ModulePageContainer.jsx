@@ -12,7 +12,9 @@ import {formatExamDate} from 'utils/modules';
 import type {TimetableConfig} from 'types/timetables';
 import AddModuleButton from './AddModuleButton';
 import RemoveModuleButton from './RemoveModuleButton';
-import InlineEdit from 'react-edit-inline';
+import {RIEToggle, RIEInput, RIETextArea, RIENumber, RIETags, RIESelect} from 'riek'
+import {Button} from 'react-bootstrap';
+import AlertContainer from 'react-alert'
 
 
 var firebase = require("firebase");
@@ -46,14 +48,25 @@ export class ModulePageContainer extends Component {
   constructor() {
     super();
     this.dataChanged = this.dataChanged.bind(this);
+    //this.isStringAcceptable = this.isStringAcceptable.bind(this);
 
     this.state = {
       usefulLinks: '',
       feedbacks: '',
       projects: '',
       funFacts: '',
+      highlight: true,
+    };
+
+    this.alertOptions = {
+      offset: 14,
+      position: 'top right',
+      theme: 'light',
+      time: 5000,
+      transition: 'scale'
     }
   }
+
 
   componentDidMount() {
     this.loadModuleInformation(this.props);
@@ -68,18 +81,14 @@ export class ModulePageContainer extends Component {
         feedbacks: '',
         projects: '',
         funFacts: '',
+        saveSuccess: '',
       });
     }
   }
 
+
   loadModuleInformation(props: Props) {
     this.props.loadModule(props.routeParams.moduleCode);
-
-    // this.readUsefulLinks();
-    // this.readFeedbacks();
-    // this.readProjects();
-    // this.readFunFacts();
-
   }
 
   semestersOffered(): number[] {
@@ -109,7 +118,7 @@ export class ModulePageContainer extends Component {
 
   readUsefulLinks() {
     var ref = firebase.database().ref(this.props.module.ModuleCode + '/usefulLinks/');
-    console.log('asdsads' + this.state.usefulLinks + 'asd');
+    //console.log('asdsads' + this.state.usefulLinks + 'asd');
     ref.on('value', function (snapshot) {
       var obj = snapshot.val();
 
@@ -165,13 +174,30 @@ export class ModulePageContainer extends Component {
     // Update your model from here
     //console.log(data);
     this.setState({...data});
+    // var ref = firebase.database().ref(this.props.module.ModuleCode + '/');
+    //
+    // ref.update({
+    //   ...data
+    // });
+  }
+
+  saveData() {
     var ref = firebase.database().ref(this.props.module.ModuleCode + '/');
 
     ref.update({
-      ...data
+      usefulLinks: this.state.usefulLinks,
+      feedbacks: this.state.feedbacks,
+      projects: this.state.projects,
+      funFacts: this.state.funFacts,
     });
+    this.showSuccessAlert();
   }
 
+  showSuccessAlert() {
+    this.msg.show('Data have been saved', {
+      type: 'success',
+    })
+  }
 
 
   render() {
@@ -260,20 +286,49 @@ export class ModulePageContainer extends Component {
               <hr />
               <dl className="row">
 
-              <dt className="col-sm-3">Useful Links</dt>
-              <dd className="col-sm-9">{ this.state.usefulLinks !== '' ? <InlineEdit text={this.state.usefulLinks} activeClassName="editing" change={this.dataChanged} paramName="usefulLinks" /> : this.readUsefulLinks() }</dd>
-
-              <dt className="col-sm-3">Past lecturers/tutors feedback</dt>
-              <dd className="col-sm-9">{ this.state.feedbacks !== '' ? <InlineEdit text={this.state.feedbacks} activeClassName="editing" change={this.dataChanged} paramName="feedbacks" /> : this.readFeedbacks() }</dd>
-
-              <dt className="col-sm-3">Outstanding projects</dt>
-              <dd className="col-sm-9">{ this.state.projects !== '' ? <InlineEdit text={this.state.projects} activeClassName="editing" change={this.dataChanged} paramName="projects" /> : this.readProjects() }</dd>
-
-              <dt className="col-sm-3">Fun facts</dt>
-              <dd className="col-sm-9">{ this.state.funFacts !== '' ? <InlineEdit text={this.state.funFacts} activeClassName="editing" change={this.dataChanged} paramName="funFacts" /> : this.readFunFacts() }</dd>
-
+                <dt className="col-sm-3">Useful Links</dt>
+                <dd className="col-sm-9" title="Click to edit!">{ this.state.usefulLinks !== '' ?
+                  <RIETextArea rows="3" cols="80"
+                               value={this.state.usefulLinks}
+                               change={this.dataChanged}
+                               propName='usefulLinks' className={this.state.highlight ? "editable" : ""}
+                  /> : this.readUsefulLinks() }</dd>
               </dl>
-            </div> : null
+              <dl className="row">
+                <dt className="col-sm-3">Past lecturers/tutors feedback</dt>
+                <dd className="col-sm-9" title="Click to edit!">{ this.state.feedbacks !== '' ?
+                  <RIETextArea rows="3" cols="80"
+                               value={this.state.feedbacks}
+                               change={this.dataChanged}
+                               propName='feedbacks' className={this.state.highlight ? "editable" : ""}
+                  /> : this.readFeedbacks() }</dd>
+              </dl>
+
+              <dl className="row">
+                <dt className="col-sm-3">Outstanding projects</dt>
+                <dd className="col-sm-9" title="Click to edit!">{ this.state.projects !== '' ?
+                  <RIETextArea rows="3" cols="80"
+                               value={this.state.projects}
+                               change={this.dataChanged}
+                               propName='projects' className={this.state.highlight ? "editable" : ""}
+                  /> : this.readProjects() }</dd>
+              </dl>
+
+              <dl className="row">
+                <dt className="col-sm-3">Fun facts</dt>
+                <dd className="col-sm-9" title="Click to edit!">{ this.state.funFacts !== '' ?
+                  <RIETextArea rows="3" cols="80"
+                               value={this.state.funFacts}
+                               change={this.dataChanged}
+                               propName='funFacts' className={this.state.highlight ? "editable" : ""}
+                  /> : this.readFunFacts() }</dd>
+              </dl>
+
+              <Button onClick={()=>{ this.saveData() }} bsStyle="primary">Save</Button>
+              <AlertContainer ref={a => this.msg = a} {...this.alertOptions}/>
+
+
+            </div > : null
           }
         </div>
       </DocumentTitle>

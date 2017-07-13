@@ -12,6 +12,18 @@ declare module 'react' {
   declare module.exports: any;
 }
 
+declare module 'react-alert' {
+  declare module.exports: any;
+}
+
+declare module 'react-bootstrap' {
+  declare module.exports: any;
+}
+
+declare module 'react-bootstrap-toggle' {
+  declare module.exports: any;
+}
+
 declare module 'react-dom' {
   declare module.exports: any;
 }
@@ -20,6 +32,6 @@ declare module 'react-edit-inline' {
   declare module.exports: any;
 }
 
-declare module 'react-notifications' {
+declare module 'stylelint-order' {
   declare module.exports: any;
 }
